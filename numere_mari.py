@@ -98,14 +98,37 @@ def inmulteste(a, b):
 
 # ---------- Afișare ----------
 
-def afiseaza_operatie(operanzi, semn, rezultat):
-    """Afișează o operație aliniată la dreapta, ca la calculul în coloană."""
-    latime = max(len(x) for x in operanzi + [rezultat]) + 2
-    print(operanzi[0].rjust(latime))
-    for x in operanzi[1:]:
-        print(semn + x.rjust(latime - 1))
+def cifre_text(numar):
+    """'1 cifră' / '5 cifre' – acord corect în limba română."""
+    n = len(numar)
+    return "1 cifră" if n == 1 else f"{n} cifre"
+
+
+def afiseaza_adunare(sa, sb, suma):
+    """Afișează adunarea aliniată la dreapta, ca la calculul în coloană."""
+    latime = max(len(sa), len(sb), len(suma)) + 2
+    print(sa.rjust(latime))
+    print("+" + sb.rjust(latime - 1))
     print("-" * latime)
-    print(rezultat.rjust(latime))
+    print(suma.rjust(latime))
+
+
+def afiseaza_inmultire(sa, sb, a, b, produs):
+    """
+    Afișează înmulțirea în coloană: fiecare produs parțial (a × cifra lui b)
+    este deplasat cu câte o poziție spre stânga, apoi se face suma lor.
+    """
+    latime = max(len(sa), len(sb), len(produs)) + 2
+    print(sa.rjust(latime))
+    print("x" + sb.rjust(latime - 1))
+    print("-" * latime)
+    for i, cifra in enumerate(b):
+        partial = cifre_in_sir(inmulteste_cu_cifra(a, cifra))
+        semn = "+" if i == len(b) - 1 and len(b) > 1 else " "
+        print(semn + (partial + " " * i).rjust(latime - 1))
+    if len(b) > 1:
+        print("-" * latime)
+        print(produs.rjust(latime))
 
 
 def main():
@@ -117,26 +140,21 @@ def main():
 
     a, b = sir_in_cifre(sa), sir_in_cifre(sb)
     suma = cifre_in_sir(aduna(a, b))
-    produs_cifre, partiale = inmulteste(a, b)
-    produs = cifre_in_sir(produs_cifre)
+    produs = cifre_in_sir(inmulteste(a, b)[0])
 
-    print(f"Primul număr ({len(sa)} cifre):  {sa}")
-    print(f"Al doilea număr ({len(sb)} cifre): {sb}")
+    print(f"Primul număr ({cifre_text(sa)}):    {sa}")
+    print(f"Al doilea număr ({cifre_text(sb)}): {sb}")
 
-    print("\n=== Adunare ===")
-    afiseaza_operatie([sa, sb], "+", suma)
-
-    print("\n=== Înmulțire ===")
+    # Calculul în coloană se afișează doar dacă încape pe ecran
     if len(sb) <= 10 and len(sa) + len(sb) <= 60:
-        # pentru numere scurte arătăm și produsele parțiale
-        afiseaza_operatie([sa, sb], "x", "")
-        print("produse parțiale:")
-        afiseaza_operatie([cifre_in_sir(p) for p in partiale], "+", produs)
-    else:
-        afiseaza_operatie([sa, sb], "x", produs)
+        print("\n=== Adunare ===")
+        afiseaza_adunare(sa, sb, suma)
+        print("\n=== Înmulțire ===")
+        afiseaza_inmultire(sa, sb, a, b, produs)
 
-    print(f"\nSuma   ({len(suma)} cifre):  {suma}")
-    print(f"Produsul ({len(produs)} cifre): {produs}")
+    print("\n=== Rezultate ===")
+    print(f"Suma     ({cifre_text(suma)}): {suma}")
+    print(f"Produsul ({cifre_text(produs)}): {produs}")
 
 
 if __name__ == "__main__":
