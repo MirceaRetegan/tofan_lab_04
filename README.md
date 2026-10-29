@@ -25,4 +25,20 @@ Exemplu: pentru `n = 10` se afișează `10 = 3 + 7` și `10 = 5 + 5`.
 
 ## Cerința 2 – Adunarea și înmulțirea numerelor mari
 
-_În lucru pe branch-ul `feature/big-numbers`._
+Fișier: `numere_mari.py`
+
+Citește două numere naturale (maxim 200 de cifre fiecare) din `numere.txt`,
+câte unul pe linie, și afișează suma și produsul. Numerele sunt reprezentate
+ca liste de cifre – nu sunt convertite la `int` și nu se folosesc biblioteci
+pentru numere mari.
+
+- adunare cifră cu cifră, de la dreapta la stânga, cu transport;
+- înmulțire în coloană, prin produse parțiale și transport;
+- se verifică existența fișierului și validitatea datelor;
+- se tratează valorile 0 și 1, transportul final și zerourile din față.
+
+```bash
+python numere_mari.py
+```
+
+Exemplu: pentru `999` și `2` → suma `1001`, produsul `1998`.
